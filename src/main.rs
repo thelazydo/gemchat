@@ -1,3 +1,4 @@
+use clap::Parser;
 use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind};
 use ratatui::{
@@ -20,6 +21,10 @@ use tui_textarea::TextArea;
 mod ai;
 
 const SPINNER_FRAMES: &[&str] = &["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
+
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Cli {}
 
 #[derive(Clone, Copy, PartialEq)]
 enum InputMode {
@@ -497,6 +502,8 @@ fn parse_inline_styles(line: &str) -> Vec<Span<'_>> {
 async fn main() -> Result<()> {
     color_eyre::install()?;
     dotenvy::dotenv().ok();
+
+    let _cli = Cli::parse();
 
     let terminal = ratatui::init();
     let result = run(terminal).await;
